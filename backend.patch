@@ -2,12 +2,12 @@ Index: addons/stock/models/location.js
 ===================================================================
 --- addons/stock/models/location.js	(revision 2200)
 +++ addons/stock/models/location.js	(working copy)
-@@ -1,56 +1,103 @@
+@@ -1,56 +1,114 @@
  const BaseModel = require("../../base").BaseModel;
- // const logger = require('../../../utils').Logger;
-+var stockModel = null;
-+process.nextTick(() => (stockModel = require("./stock_warehouse")));
 +const _ = require("lodash");
+ // const logger = require('../../../utils').Logger;
++// var stockModel = null;
++// process.nextTick(() => (stockModel = require("./stock_warehouse")));
  
  class Location extends BaseModel {
 -    constructor(connection) {
@@ -50,14 +50,6 @@ Index: addons/stock/models/location.js
 -            },
 -            write_date: { type: "date", string: "write_date" },
 -            write_uid: { type: "many2one", refModel: "ResUser", string: "write_uid" },
--        };
--        this._init(this.fields);
--        this.allowFunc = ["search", "update", "create", "delete"];
--        this.permission_create = "GROUP_KETOANVIEN";
--        this.permission_read = "GROUP_KETOANVIEN";
--        this.permission_update = "GROUP_KETOANVIEN";
--        this.permission_delete = "GROUP_KETOANVIEN";
--    }
 +  constructor(connection) {
 +    super(connection);
 +    this.name = "Location";
@@ -65,12 +57,12 @@ Index: addons/stock/models/location.js
 +    this.fields = {
 +      name: {
 +        type: "string",
-+        string: "name"
++        string: "name",
 +      },
 +      display_name: {
 +        require: true,
 +        type: "string",
-+        string: "display_name"
++        string: "display_name",
 +      },
 +      location_id: {
 +        type: "many2one",
@@ -79,7 +71,7 @@ Index: addons/stock/models/location.js
 +      },
 +      usage: {
 +        type: "string",
-+        string: "usage"
++        string: "usage",
 +      },
 +      partner_id: {
 +        type: "many2one",
@@ -99,11 +91,11 @@ Index: addons/stock/models/location.js
 +      },
 +      scrap_location: {
 +        type: "boolean",
-+        string: "scrap_location"
++        string: "scrap_location",
 +      },
 +      return_location: {
 +        type: "boolean",
-+        string: "return_location"
++        string: "return_location",
 +      },
 +      // posx: { type: "number", string: "posx" },
 +      // posy: { type: "number", string: "posy" },
@@ -111,11 +103,11 @@ Index: addons/stock/models/location.js
 +      // barcode: { type: "string", string: "barcode" },
 +      comment: {
 +        type: "string",
-+        string: "comment"
++        string: "comment",
 +      },
 +      create_date: {
 +        type: "date",
-+        string: "create_date"
++        string: "create_date",
 +      },
 +      create_uid: {
 +        type: "many2one",
@@ -124,31 +116,50 @@ Index: addons/stock/models/location.js
 +      },
 +      write_date: {
 +        type: "date",
-+        string: "write_date"
++        string: "write_date",
 +      },
 +      write_uid: {
 +        type: "many2one",
 +        refModel: "ResUser",
-+        string: "write_uid"
++        string: "write_uid",
 +      },
 +    };
 +    this._init(this.fields);
-+    this.allowFunc = ["search", "update", "create", "createLocation", "delete"];
++    this.allowFunc = ["search", "update", "create", "delete"];
 +    this.permission_create = "GROUP_KETOANVIEN";
 +    this.permission_read = "GROUP_KETOANVIEN";
 +    this.permission_update = "GROUP_KETOANVIEN";
 +    this.permission_delete = "GROUP_KETOANVIEN";
 +  }
- 
++
 +  // ============================= createLocation ==============================
 +  _preCreate(payload = {}, permission = {}) {
-+    let newPayload = _.cloneDeep(payload);
-+    // this.search(newPayload);
-+
-+
-+    //newPayload.documents[0].name = `<ParentLocationName>/${newPayload.documents[0].display_name}`;
-+
-+    return super._preCreate(newPayload = {}, permission = {})
++    let newLocationPayload = _.cloneDeep(payload);
++    return this.search({
++      username: payload.username,
++      domain: [
++        ["location_id", "=", payload.documents[0].location_id]
++      ],
++      projection: ["name"],
++    }).then((res) => {
++      if (res.hasOwnProperty("status") && res.hasOwnProperty("message")) {
++        return { // or throw?
++          status: res.status,
++          message: `location - _preCreate: ${res.message}`,
+         };
+-        this._init(this.fields);
+-        this.allowFunc = ["search", "update", "create", "delete"];
+-        this.permission_create = "GROUP_KETOANVIEN";
+-        this.permission_read = "GROUP_KETOANVIEN";
+-        this.permission_update = "GROUP_KETOANVIEN";
+-        this.permission_delete = "GROUP_KETOANVIEN";
+-    }
+-
++      } else {
++        newLocationPayload.documents[0].name = `${res[0].name}/${payload.documents[0].display_name}`;
++        return super._preCreate(newLocationPayload, permission);
++      }
++    });
 +  }
 +  // ============================= endCreateLocation ==============================
  }
@@ -160,7 +171,7 @@ Index: addons/stock/models/stock_warehouse.js
 ===================================================================
 --- addons/stock/models/stock_warehouse.js	(revision 2200)
 +++ addons/stock/models/stock_warehouse.js	(working copy)
-@@ -1,86 +1,116 @@
+@@ -1,86 +1,138 @@
 -const BaseModel = require('../../base').BaseModel;
 +const BaseModel = require("../../base").BaseModel;
  // const logger = require('../../../utils').Logger;
@@ -188,10 +199,24 @@ Index: addons/stock/models/stock_warehouse.js
 -      write_date: { type: 'date', string: 'write_date' },
 -      write_uid: { type: 'many2one', refModel: 'ResUser', string: 'write_uid' },
 -
-+      name: { require: true, type: "string", string: "name" },
-+      display_name: { type: "string", string: "display_name" },
-+      code: { require: true, type: "string", string: "code" },
-+      address: { type: "string", type: "address" },
++      name: {
++        require: true,
++        type: "string",
++        string: "name"
++      },
++      display_name: {
++        type: "string",
++        string: "display_name"
++      },
++      code: {
++        require: true,
++        type: "string",
++        string: "code"
++      },
++      address: {
++        type: "string",
++        type: "address"
++      },
 +      location_id: {
 +        type: "many2one",
 +        refModel: "Location",
@@ -203,14 +228,24 @@ Index: addons/stock/models/stock_warehouse.js
 +        refModel: "ResCompany",
 +        string: "company_id",
 +      },
-+      create_date: { type: "date", string: "create_date" },
++      create_date: {
++        type: "date",
++        string: "create_date"
++      },
 +      create_uid: {
 +        type: "many2one",
 +        refModel: "ResUser",
 +        string: "create_uid",
 +      },
-+      write_date: { type: "date", string: "write_date" },
-+      write_uid: { type: "many2one", refModel: "ResUser", string: "write_uid" },
++      write_date: {
++        type: "date",
++        string: "write_date"
++      },
++      write_uid: {
++        type: "many2one",
++        refModel: "ResUser",
++        string: "write_uid"
++      },
      };
      this._init(this.fields);
 -    this.allowFunc = ['search', 'update', 'create', 'createStockAndLocation', 'delete'];
@@ -265,25 +300,23 @@ Index: addons/stock/models/stock_warehouse.js
 -            : JSON.stringify(err),
 +  _postCreate(payload = {}, result = {}) {
 +    let newPayload = _.cloneDeep(payload)
-+    newPayload.documents = [
-+      {
-+        display_name: "Kho",
-+        name: `${payload.documents[0].code}/Kho`,
-+        stock_warehouse_id: payload.documents[0]._id,
-+      },
-+    ];
++    newPayload.documents = [{
++      display_name: "Kho",
++      name: `${payload.documents[0].code}/Kho`,
++      stock_warehouse_id: payload.documents[0]._id,
++    }, ];
 +    locationModel.getCollection();
 +    return locationModel.create(newPayload).then((newResult) => {
 +      if (newResult.status || newResult.message) {
-+        return {
-+          status: newResult.data.status,// data?
++        return { // is it throw or return?
++          status: newResult.data.status, // data?
 +          message: `SW-PC ${newResult.data.message}`,
          };
 -        logger.error(error);
 -        return error;
 -      });
 +      } else {
-+        return super._postCreate(payload, result)
++        return super._postCreate(payload, result) // Is it payload or newPayload?
 +      }
 +    });
    }
@@ -340,6 +373,5 @@ Index: addons/stock/models/stock_warehouse.js
 -
  }
  
--module.exports = new StockWarehouse();
+ module.exports = new StockWarehouse();
 \ No newline at end of file
-+module.exports = new StockWarehouse();

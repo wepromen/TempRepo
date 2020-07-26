@@ -50,8 +50,8 @@ Index: src/addons/stock/controllers/watcherLocation.js
 +  generatorUpdateRecord,
 +} from "../../base/controllers/generator";
 +import { put, call, take, takeLeading } from "redux-saga/effects";
-+import axios from "axios";
-+import Cookies from "js-cookie";
++// import axios from "axios";
++// import Cookies from "js-cookie";
  
 -
  export function* watcherLocation() {
