@@ -1,0 +1,16 @@
+[
+  {
+    '$match': {
+      'embedded_ids.qty': {
+        '$gt': 20
+      }
+    }
+  }, {
+    '$group': {
+      '_id': '$picking_type', 
+      'count': {
+        '$sum': 1
+      }
+    }
+  }
+]
