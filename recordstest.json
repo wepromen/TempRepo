@@ -1,12 +1,12 @@
 [{
   "_id": {
-    "$oid": "5f363711d5e3191bc807839c"
+    "$oid": "5f3a3f9d16fea61128c02732"
   },
   "picking_id": {
-    "$oid": "5f3636f3d5e3191bc807839a"
+    "$oid": "5f3a3f9b16fea61128c02730"
   },
-  "stock_move_id": {
-    "$oid": "5f3636f3d5e3191bc807839b"
+  "move_id": {
+    "$oid": "5f3a3f9c16fea61128c02731"
   },
   "location_source_id": {
     "$oid": "5f27aa6f456dd126b089a1e3"
@@ -20,40 +20,41 @@
   "product_id": {
     "$oid": "5f1e7245c0ff3a1bec9cff07"
   },
-  "picking_type": "in",
+  "picking_type": "IN",
   "status": "done",
-  "create_date": 1597388561000,
+  "create_date": 1597652893000,
   "create_uid": {
     "$oid": "5f1e604447ba1b17e8a518e6"
   },
-  "write_date": 1597511439000,
+  "write_date": 1597653396000,
   "write_uid": {
-    "$oid": "5f1e5fe647ba1b17e8a518e3"
+    "$oid": "5f1e604447ba1b17e8a518e6"
   },
-  "product_qty": 250,
-  "product_reserving_qty": 0,
-  "product_qty_done": 250,
-  "date_done": 1597388569000,
+  "line_in_id": "",
+  "product_qty": 0,
+  "reserved_qty": 0,
+  "qty_done": 200,
+  "date_done": 1597653396000,
   "company_id": {
     "$oid": "5f1e5dc247ba1b17e8a518dd"
   },
-  "embedded_ids": [
+  "line_out_ids": [
     {
-      "id": {
-        "$oid": "5f38d48d8b6ec530f8e1307a"
+      "_id": {
+        "$oid": "5f3aada8fead3e198cc0b524"
       },
-      "qty": 100
+      "qty": 200
     }
   ]
 },{
   "_id": {
-    "$oid": "5f38d48d8b6ec530f8e1307a"
+    "$oid": "5f3a45c04669580bb8967225"
   },
   "picking_id": {
-    "$oid": "5f3743727aa8cc1ea4ba2289"
+    "$oid": "5f3a45be4669580bb8967223"
   },
-  "stock_move_id": {
-    "$oid": "5f3743727aa8cc1ea4ba228a"
+  "move_id": {
+    "$oid": "5f3a45bf4669580bb8967224"
   },
   "location_source_id": {
     "$oid": "5f27aa6f456dd126b089a1e3"
@@ -67,29 +68,114 @@
   "product_id": {
     "$oid": "5f1e7245c0ff3a1bec9cff07"
   },
-  "picking_type": "out",
-  "status": "assigned",
-  "create_date": 1597388561000,
+  "picking_type": "IN",
+  "status": "done",
+  "create_date": 1597654464000,
   "create_uid": {
     "$oid": "5f1e604447ba1b17e8a518e6"
   },
-  "write_date": 1597511439000,
+  "write_date": 1597654474000,
   "write_uid": {
-    "$oid": "5f1e5fe647ba1b17e8a518e3"
+    "$oid": "5f1e604447ba1b17e8a518e6"
   },
-  "product_qty": 100,
-  "product_reserving_qty": 100,
-  "product_qty_done": 0,
-  "date_done": 1597388569000,
+  "line_in_id": "",
+  "product_qty": 0,
+  "reserved_qty": 0,
+  "qty_done": 300,
+  "date_done": 1597654473000,
   "company_id": {
     "$oid": "5f1e5dc247ba1b17e8a518dd"
   },
-  "embedded_ids": [
+  "line_out_ids": [
     {
-      "id": {
-        "$oid": "5f363711d5e3191bc807839c"
+      "_id": {
+        "$oid": "5f3aada8fead3e198cc0b525"
       },
-      "qty": 100
+      "qty": 300
     }
   ]
+},{
+  "_id": {
+    "$oid": "5f3aada8fead3e198cc0b524"
+  },
+  "move_id": {
+    "$oid": "5f3aa353fead3e198cc0b520"
+  },
+  "product_id": {
+    "$oid": "5f1e7245c0ff3a1bec9cff07"
+  },
+  "location_dest_id": {
+    "$oid": "5f27afe519967f1de42d2829"
+  },
+  "location_source_id": {
+    "$oid": "5f27aedb251bce1b05bb4101"
+  },
+  "picking_type": "OUT",
+  "picking_id": {
+    "$oid": "5f3aa353fead3e198cc0b51f"
+  },
+  "status": "assigned",
+  "product_uom_id": {
+    "$oid": "5f1e71113236dd208c4464ec"
+  },
+  "reserved_qty": 200,
+  "line_in_id": {
+    "$oid": "5f3a3f9d16fea61128c02732"
+  },
+  "create_date": 1597681064000,
+  "create_uid": {
+    "$oid": "5f1e5fe647ba1b17e8a518e3"
+  },
+  "write_date": 1597681064000,
+  "write_uid": {
+    "$oid": "5f1e5fe647ba1b17e8a518e3"
+  },
+  "product_qty": 0,
+  "qty_done": 0,
+  "date_done": 0,
+  "company_id": {
+    "$oid": "5f1e5dc247ba1b17e8a518dd"
+  }
+},{
+  "_id": {
+    "$oid": "5f3aada8fead3e198cc0b525"
+  },
+  "move_id": {
+    "$oid": "5f3aa353fead3e198cc0b520"
+  },
+  "product_id": {
+    "$oid": "5f1e7245c0ff3a1bec9cff07"
+  },
+  "location_dest_id": {
+    "$oid": "5f27afe519967f1de42d2829"
+  },
+  "location_source_id": {
+    "$oid": "5f27aedb251bce1b05bb4101"
+  },
+  "picking_type": "OUT",
+  "picking_id": {
+    "$oid": "5f3aa353fead3e198cc0b51f"
+  },
+  "status": "assigned",
+  "product_uom_id": {
+    "$oid": "5f1e71113236dd208c4464ec"
+  },
+  "reserved_qty": 300,
+  "line_in_id": {
+    "$oid": "5f3a45c04669580bb8967225"
+  },
+  "create_date": 1597681064000,
+  "create_uid": {
+    "$oid": "5f1e5fe647ba1b17e8a518e3"
+  },
+  "write_date": 1597681064000,
+  "write_uid": {
+    "$oid": "5f1e5fe647ba1b17e8a518e3"
+  },
+  "product_qty": 0,
+  "qty_done": 0,
+  "date_done": 0,
+  "company_id": {
+    "$oid": "5f1e5dc247ba1b17e8a518dd"
+  }
 }]
